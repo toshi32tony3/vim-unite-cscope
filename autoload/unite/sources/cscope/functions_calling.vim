@@ -30,16 +30,20 @@ function! s:source.gather_candidates(args, context) "{{{
   endif
 
   let query = cscope#functions_calling(a:context.input)
+  let currentDir = getcwd()
+  execute 'cd ' . g:unite_source_cscope_dir
   
   try
     let a:context.source__proc = vimproc#plineopen2(
           \ vimproc#util#iconv(
           \   query, &encoding, 'char'), 1)
   catch
+    execute 'cd ' . currentDir
     call unite#print_error(v:exception)
     let a:context.is_async = 0
     return []
   endtry
+  execute 'cd ' . currentDir
 
   return self.async_gather_candidates(a:args, a:context)
 endfunction

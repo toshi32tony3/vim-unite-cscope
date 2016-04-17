@@ -1,6 +1,10 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+if !exists('g:unite_source_cscope_dir')
+  let g:unite_source_cscope_dir = ''
+endif
+
 function! unite#sources#cscope#define() "{{{
   let sources = []
   for command in s:get_commands()
